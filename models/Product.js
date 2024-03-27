@@ -15,8 +15,11 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   salePrice: { type: Number },
   stock: { type: Number, required: true },
-  onSale: { type: Boolean, default: false }, // Indicates if the product is on sale
-  // Add more fields as needed
+  onSale: { type: Boolean, default: false },
+  isFeatured: { type: Boolean, default: true, required: true },
+  isNewRelease: { type: Boolean, default: false },
+  orderCount: { type: Number, default: 0 },
+  rating: { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model("Product", productSchema);

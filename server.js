@@ -9,9 +9,9 @@ const app = express();
 const PORT = process.env.PORT || 5005;
 
 // Middleware
-app.use(bodyParser.json());
-app.use(cors());
 
+app.use(cors());
+app.use(express.json());
 // Define routes
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/product");

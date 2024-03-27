@@ -2,9 +2,27 @@
 
 const Product = require("../models/Product");
 
+// Get featured products
+exports.getFeaturedProducts = async (req, res) => {
+  try {
+    const featuredProducts = await Product.find({ isFeatured: true });
+    res.json(featuredProducts);
+    console.log(featuredProducts);
+  } catch (error) {
+    console.error("Error fetching featured products:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 // Get all products
 exports.getAllProducts = async (req, res) => {
-  // Implement logic to fetch all products
+  try {
+    const products = await Product.find({});
+    res.json(products);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 // Get product by ID

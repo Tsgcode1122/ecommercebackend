@@ -9,6 +9,9 @@ router.get("/:id", ProductController.getProductById);
 router.post("/", ProductController.createProduct);
 router.put("/:id", ProductController.updateProduct);
 router.delete("/:id", ProductController.deleteProduct);
+// Fetch featured products
+router.get("/featured", ProductController.getFeaturedProducts);
+
 // Add routes for filtering products, adding reviews, etc.
 
 module.exports = router;
