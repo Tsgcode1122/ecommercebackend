@@ -9,7 +9,7 @@ const reviewSchema = new mongoose.Schema({
     ref: "Product",
     required: true,
   },
-  rating: { type: Number, required: true },
+  rating: { type: Number, default: 0, required: true },
   comment: { type: String },
   // Add more fields as needed
 });

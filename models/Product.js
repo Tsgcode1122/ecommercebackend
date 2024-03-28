@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   images: [{ type: String, required: true }],
-  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+
   variants: [
     {
       color: { type: String, required: true },
@@ -23,7 +23,6 @@ const productSchema = new mongoose.Schema({
   isFeatured: { type: Boolean, default: true, required: true },
   isNewRelease: { type: Boolean, default: false },
   orderCount: { type: Number, default: 0 },
-  rating: { type: Number, default: 0 },
 });
 
 // Validator function to ensure price array has exactly 2 elements
