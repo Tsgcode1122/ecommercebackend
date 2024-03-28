@@ -11,7 +11,7 @@ const reviewSchema = new mongoose.Schema({
   },
   rating: { type: Number, default: 0, required: true },
   comment: { type: String },
-  // Add more fields as needed
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Review", reviewSchema);
