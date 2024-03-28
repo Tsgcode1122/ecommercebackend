@@ -30,15 +30,48 @@ exports.getReviewById = async (req, res) => {
 
 // Create a new review
 exports.createReview = async (req, res) => {
-  // Implement logic to create a new review
+  try {
+    const { rating, comment, productId } = req.body;
+    const newReview = new Review({ rating, comment, productId });
+    await newReview.save();
+    res.status(201).json(newReview);
+  } catch (error) {
+    console.error("Error creating review:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 // Update a review
 exports.updateReview = async (req, res) => {
-  // Implement logic to update a review
+  try {
+    const { id } = req.params;
+    const { rating, comment, productId } = req.body;
+    const updatedReview = await Review.findByIdAndUpdate(
+      id,
+      { rating, comment, productId },
+      { new: true },
+    );
+    if (!updatedReview) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+    res.json(updatedReview);
+  } catch (error) {
+    console.error("Error updating review:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 // Delete a review
 exports.deleteReview = async (req, res) => {
-  // Implement logic to delete a review
+  try {
+    const { id } = req.params;
+    const deletedReview = await Review.findByIdAndDelete(id);
+    if (!deletedReview) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+    res.json({ message: "Review deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting review:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
