@@ -5,15 +5,19 @@ const mongoose = require("mongoose");
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
-  images: [{ type: String, required: true }], // Array of image URLs
-  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }], // Array of review IDs
-  color: { type: String },
-  dimensions: { type: String },
+  images: [{ type: String, required: true }],
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+  variants: [
+    {
+      color: { type: String, required: true },
+      price: { type: Number },
+    },
+  ],
+  dimensions: [{ type: String, required: true }],
   brand: { type: String },
   category: { type: String },
-  productId: { type: String, required: true }, // Product ID or SKU
-  price: { type: Number, required: true },
-  salePrice: { type: Number },
+  productId: { type: String, required: true },
+  price: { type: [Number], required: true, validate: priceValidator },
   stock: { type: Number, required: true },
   onSale: { type: Boolean, default: false },
   isFeatured: { type: Boolean, default: true, required: true },
@@ -21,5 +25,10 @@ const productSchema = new mongoose.Schema({
   orderCount: { type: Number, default: 0 },
   rating: { type: Number, default: 0 },
 });
+
+// Validator function to ensure price array has exactly 2 elements
+function priceValidator(value) {
+  return Array.isArray(value) && value.length === 2;
+}
 
 module.exports = mongoose.model("Product", productSchema);
