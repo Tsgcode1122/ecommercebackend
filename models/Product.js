@@ -1,24 +1,25 @@
-// models/Product.js
-
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   images: [{ type: String, required: true }],
-
   variants: [
     {
       color: { type: String, required: true },
-      price: { type: Number },
+      sizes: [
+        {
+          size: { type: String, required: true },
+          price: { type: Number, required: true },
+          stock: { type: Number, required: true },
+        },
+      ],
     },
   ],
-  dimensions: [{ type: String, required: true }],
   brand: { type: String },
   category: { type: String },
   productId: { type: String, required: true },
   price: { type: [Number], required: true, validate: priceValidator },
-  stock: { type: Number, required: true },
   onSale: { type: Boolean, default: false },
   isFeatured: { type: Boolean, default: true, required: true },
   isNewRelease: { type: Boolean, default: false },
