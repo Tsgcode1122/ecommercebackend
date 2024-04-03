@@ -37,6 +37,16 @@ passport.use(
     },
   ),
 );
+
+// Generate a strong random secret key
+// const generateSecretKey = () => {
+//   return crypto.randomBytes(32).toString("hex"); // 32 bytes is a good length for a secure key
+// };
+
+// // Example usage
+// const secretKey = generateSecretKey();
+// console.log("Generated secret key:", secretKey);
+
 // Define routes
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/product");
@@ -45,6 +55,7 @@ const wishlistRoutes = require("./routes/wishlist");
 const orderRoutes = require("./routes/order");
 const reviewRoutes = require("./routes/review");
 const emailRoutes = require("./routes/emailRoutes");
+const resetRoutes = require("./routes/resetRoutes");
 const { randomBytes } = require("crypto");
 
 // Print the generated JWT secret
@@ -56,6 +67,7 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/email", emailRoutes);
+app.use("/api/reset", resetRoutes);
 // Start server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

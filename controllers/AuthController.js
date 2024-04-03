@@ -3,7 +3,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+require("dotenv").config();
 // Register a new user
 exports.register = async (req, res) => {
   try {
@@ -67,7 +67,8 @@ exports.login = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.status(200).json({ token });
+    // Return user data along with the token
+    res.status(200).json({ token, user });
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -75,13 +76,46 @@ exports.login = async (req, res) => {
 };
 
 // Forgot password
+// Forgot password
 exports.forgotPassword = async (req, res) => {
-  // Implement forgot password logic here
-  // This could include sending a password reset link to the user's email
+  const { email } = req.body;
+
+  try {
+    // Check if the user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "reset sent to email" });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+exports.newPasswords = async (req, res) => {
+  const { email, newPassword } = req.body;
+  try {
+    // Check if the user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    // Send a response
+    res.status(200).json({ message: "password change successffully" });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 // Reset password
-exports.resetPassword = async (req, res) => {
-  // Implement reset password logic here
-  // This could include validating the reset token and updating the user's password
-};
+
+// good, i want you  to create a nice reset password from antd, i want when a input that say input your email, after that, it use the usercontext to check if the mail exist, if it exist in the data base, it should

@@ -7,7 +7,8 @@ const AuthController = require("../controllers/AuthController");
 router.post("/register", AuthController.register);
 router.post("/login", AuthController.login);
 router.post("/forgot-password", AuthController.forgotPassword);
-router.post("/reset-password", AuthController.resetPassword);
+router.post("/new-password", AuthController.newPasswords);
+// router.post("/reset-password", AuthController.resetPassword);
 router.post("/check-exists", AuthController.checkEmailExists);
 router.get(
   "/google",
