@@ -22,11 +22,15 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.3",
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.0",
+    "npm": "^10.5.1",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "stripe": "^14.24.0",
+    "uuid": "^9.0.1"
   }
 }

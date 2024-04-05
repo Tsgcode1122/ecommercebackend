@@ -94,20 +94,25 @@ exports.forgotPassword = async (req, res) => {
 };
 exports.newPasswords = async (req, res) => {
   const { email, newPassword } = req.body;
+  console.log("email gotten:", email);
+  console.log("newpassword inputed:", newPassword);
+
+  // console.log(email);
+  // console.log(newPassword);3
   try {
     // Check if the user exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
+    //
     // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     // Update the user's password
     user.password = hashedPassword;
     await user.save();
-
+    console.log("password successfully changed");
     // Send a response
     res.status(200).json({ message: "password change successffully" });
   } catch (error) {
