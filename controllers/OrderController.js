@@ -14,7 +14,38 @@ exports.getOrderById = async (req, res) => {
 
 // Create a new order
 exports.createOrder = async (req, res) => {
-  // Implement logic to create a new order
+  try {
+    // Extract order data from the request body
+    const { userId, paymentMethod, totalPrice, cartItems, formData } = req.body;
+
+    // Create a new order instance
+    const newOrder = new Order({
+      userId: userId,
+      paymentMethod: paymentMethod,
+      totalPrice: totalPrice,
+      cartItems: cartItems,
+      formData: formData,
+    });
+
+    // Save the order to the database
+    const savedOrder = await newOrder.save();
+
+    console.log("order places successully");
+    // Return a success response to the client
+    res.status(201).json({
+      success: true,
+      message: "Order created successfully",
+      order: savedOrder,
+    });
+  } catch (error) {
+    console.error("Error creating order:", error);
+    // Return an error response to the client
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while creating the order",
+      error: error.message,
+    });
+  }
 };
 
 // Update an order

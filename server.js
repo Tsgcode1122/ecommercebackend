@@ -36,7 +36,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/email", emailRoutes);
 app.use("/api/reset", resetRoutes);
-// app.use("/api/payments", paymentsRoutes);
+app.use("/api/payments", paymentsRoutes);
 // Start server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
