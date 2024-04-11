@@ -1,7 +1,7 @@
 // controllers/ReviewController.js
 
 const Review = require("../models/Review");
-
+const User = require("../models/User");
 // Get all reviews
 exports.getAllReviews = async (req, res) => {
   try {
@@ -29,10 +29,28 @@ exports.getReviewById = async (req, res) => {
 };
 
 // Create a new review
+// Create a new review
 exports.createReview = async (req, res) => {
   try {
-    const { rating, comment, productId } = req.body;
-    const newReview = new Review({ rating, comment, productId });
+    const { rating, comment, productId, userId } = req.body;
+
+    // Fetch user data based on userId
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Extract user's full name
+    const fullName = user.fullName;
+
+    // Create new review with user's full name instead of userId
+    const newReview = new Review({
+      rating,
+      comment,
+      productId,
+      fullName,
+    });
     await newReview.save();
     res.status(201).json(newReview);
   } catch (error) {
@@ -45,10 +63,10 @@ exports.createReview = async (req, res) => {
 exports.updateReview = async (req, res) => {
   try {
     const { id } = req.params;
-    const { rating, comment, productId } = req.body;
+    const { rating, comment, productId, userId } = req.body;
     const updatedReview = await Review.findByIdAndUpdate(
       id,
-      { rating, comment, productId },
+      { rating, comment, productId, userId },
       { new: true },
     );
     if (!updatedReview) {
