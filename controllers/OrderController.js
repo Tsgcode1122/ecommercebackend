@@ -16,11 +16,21 @@ exports.getOrderById = async (req, res) => {
 exports.createOrder = async (req, res) => {
   try {
     // Extract order data from the request body
-    const { userId, paymentMethod, totalPrice, cartItems, formData } = req.body;
+    const {
+      userId,
+      shippingMethod,
+      paymentMethod,
+      payOnDeliveryOption,
+      totalPrice,
+      cartItems,
+      formData,
+    } = req.body;
 
     // Create a new order instance
     const newOrder = new Order({
       userId: userId,
+      shippingMethod: shippingMethod,
+      payOnDeliveryOption: payOnDeliveryOption,
       paymentMethod: paymentMethod,
       totalPrice: totalPrice,
       cartItems: cartItems,
