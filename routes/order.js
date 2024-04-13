@@ -9,6 +9,6 @@ router.get("/:id", OrderController.getOrderById);
 router.post("/", OrderController.createOrder);
 router.put("/:id", OrderController.updateOrder);
 router.delete("/:id", OrderController.deleteOrder);
-// router.post("/completePayment", OrderController.completePayment);
-
+router.get("/user/:userId", OrderController.getOrdersByUserId);
+router.post("/request-cancel", OrderController.requestCancelOrder);
 module.exports = router;

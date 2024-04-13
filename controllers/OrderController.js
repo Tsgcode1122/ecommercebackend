@@ -57,6 +57,16 @@ exports.createOrder = async (req, res) => {
     });
   }
 };
+exports.getOrdersByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const orders = await Order.find({ userId });
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.error("Error fetching orders by user ID:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 // Update an order
 exports.updateOrder = async (req, res) => {
@@ -66,4 +76,29 @@ exports.updateOrder = async (req, res) => {
 // Delete an order
 exports.deleteOrder = async (req, res) => {
   // Implement logic to delete an order
+};
+// Controller function to update cancelOrder field
+exports.requestCancelOrder = async (req, res) => {
+  const { userId, orderId } = req.body;
+
+  try {
+    // Find the order by userId and orderId
+    const order = await Order.findOne({ userId, _id: orderId });
+
+    if (!order) {
+      console.log(`order not found`);
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Update the cancelOrder field to true
+    order.requestCancelOrder = true;
+
+    // Save the updated order
+    await order.save();
+
+    res.status(200).json({ message: "Order canceled successfully" });
+  } catch (error) {
+    console.error("Error canceling order:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };

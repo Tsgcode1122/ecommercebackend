@@ -75,8 +75,6 @@ exports.login = async (req, res) => {
   }
 };
 
-// Forgot password
-// Forgot password
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
 
@@ -120,7 +118,37 @@ exports.newPasswords = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+// controllers/AuthController.js
 
-// Reset password
+// Update user information
+exports.updateUser = async (req, res) => {
+  try {
+    const { userId } = req.params; // Assuming userId is passed as a parameter in the request
+    const { fullName, country, state, streetAddress, city, phoneNumber } =
+      req.body;
 
-// good, i want you  to create a nice reset password from antd, i want when a input that say input your email, after that, it use the usercontext to check if the mail exist, if it exist in the data base, it should
+    // Find the user by userId
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update user's information
+    if (fullName) user.fullName = fullName;
+    if (country) user.country = country;
+    if (state) user.state = state;
+    if (streetAddress) user.streetAddress = streetAddress;
+    if (city) user.city = city;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+
+    // Save the updated user to the database
+    await user.save();
+
+    res
+      .status(200)
+      .json({ message: "User information updated successfully", user });
+  } catch (error) {
+    console.error("Error updating user information:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

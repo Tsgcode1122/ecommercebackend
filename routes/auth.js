@@ -8,20 +8,8 @@ router.post("/register", AuthController.register);
 router.post("/login", AuthController.login);
 router.post("/forgot-password", AuthController.forgotPassword);
 router.post("/new-password", AuthController.newPasswords);
-// router.post("/reset-password", AuthController.resetPassword);
+
 router.post("/check-exists", AuthController.checkEmailExists);
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] }),
-);
 
-router.get(
-  "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  function (req, res) {
-    // Successful authentication, redirect to dashboard or homepage
-    res.redirect("/");
-  },
-);
-
+router.put("/update-user/:userId", AuthController.updateUser);
 module.exports = router;

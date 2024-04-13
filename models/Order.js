@@ -35,13 +35,15 @@ const orderSchema = new mongoose.Schema({
 
   orderStatus: {
     type: String,
-    enum: ["pending", "shipped", "delivered"],
+    enum: ["pending", "shipped", "delivered", "cancelled"],
     default: "pending", // Default status should be pending
   },
 
   shippingDetails: {
     address: { type: String },
   },
+  createdAt: { type: Date, default: Date.now },
+  requestCancelOrder: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("Order", orderSchema);
