@@ -17,6 +17,7 @@ const productSchema = new mongoose.Schema({
     },
   ],
   brand: { type: String },
+  overallStock: { type: Number },
   category: { type: String },
   productId: { type: String, required: true },
   price: { type: [Number], required: true, validate: priceValidator },

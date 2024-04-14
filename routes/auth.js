@@ -12,4 +12,5 @@ router.post("/new-password", AuthController.newPasswords);
 router.post("/check-exists", AuthController.checkEmailExists);
 
 router.put("/update-user/:userId", AuthController.updateUser);
+router.get("/:userId", AuthController.checkAdminStatus);
 module.exports = router;
