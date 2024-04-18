@@ -49,7 +49,6 @@ exports.getProductById = async (req, res) => {
 // Create a new product
 exports.createProduct = async (req, res) => {
   try {
-    // Extract data from the request body
     const {
       name,
       description,
@@ -106,15 +105,92 @@ exports.createProduct = async (req, res) => {
     res.status(500).json({ error: "Failed to create product" });
   }
 };
-
-// Update a product
 exports.updateProduct = async (req, res) => {
-  // Implement logic to update a product
+  try {
+    const {
+      name,
+      description,
+      images,
+      variants,
+      brand,
+      category,
+      productId,
+      onSale,
+      isFeatured,
+      isNewRelease,
+      orderCount,
+    } = req.body;
+
+    const { id } = req.params; // Extract id from params
+    console.log(id);
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    let overallStock = 0;
+    variants.forEach((variant) => {
+      variant.sizes.forEach((size) => {
+        overallStock += size.stock;
+      });
+    });
+    let price = null;
+    const firstColorVariant = variants.find((variant) => variant.color);
+    if (firstColorVariant && firstColorVariant.sizes.length > 0) {
+      price = firstColorVariant.sizes[0].price;
+    }
+
+    // Update product fields
+    product.name = name;
+    product.description = description;
+    product.images = images;
+    product.variants = variants;
+    product.brand = brand;
+    product.category = category;
+    product.productId = productId;
+    product.onSale = onSale;
+    product.isFeatured = isFeatured;
+    product.isNewRelease = isNewRelease;
+    product.orderCount = orderCount;
+    product.overallStock = overallStock;
+    product.price = price;
+
+    // Save the updated product
+    const savedProduct = await product.save();
+
+    console.log("updated");
+    res.status(200).json(savedProduct); // Use 200 for successful update
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).json({ error: "Failed to update product" });
+  }
 };
 
 // Delete a product
 exports.deleteProduct = async (req, res) => {
-  // Implement logic to delete a product
+  try {
+    const productId = req.params.id;
+
+    // Ensure that the product exists before attempting to delete it
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      // If product not found, return 404 status and error message
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // If product is found, delete it from the database
+    await Product.findByIdAndDelete(productId);
+
+    // Return success message
+    log;
+    res.json({ message: "Product deleted successfully" });
+  } catch (error) {
+    // If an error occurs, log the error and return 500 status with error message
+    console.error("Error deleting product:", error);
+    res.status(500).json({ error: "Failed to delete product" });
+  }
 };
 
 const storage = multer.diskStorage({

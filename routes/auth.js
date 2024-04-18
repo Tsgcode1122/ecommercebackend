@@ -13,4 +13,6 @@ router.post("/check-exists", AuthController.checkEmailExists);
 
 router.put("/update-user/:userId", AuthController.updateUser);
 router.get("/:userId", AuthController.checkAdminStatus);
+router.get("/", AuthController.getAllUsers);
+router.delete("/:id", AuthController.deleteUserById);
 module.exports = router;

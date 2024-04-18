@@ -174,3 +174,32 @@ exports.checkAdminStatus = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+// Get all user data
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching all users:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+// Delete user by ID
+exports.deleteUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // Find the user by ID and delete it
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
