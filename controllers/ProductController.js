@@ -183,8 +183,6 @@ exports.deleteProduct = async (req, res) => {
     // If product is found, delete it from the database
     await Product.findByIdAndDelete(productId);
 
-    // Return success message
-    log;
     res.json({ message: "Product deleted successfully" });
   } catch (error) {
     // If an error occurs, log the error and return 500 status with error message
@@ -224,6 +222,7 @@ exports.uploadImage = (req, res) => {
 exports.deleteImage = async (req, res) => {
   try {
     const { public_id } = req.params;
+    console.log(public_id);
     const result = await cloudinary.uploader.destroy(public_id);
     if (result.result === "ok") {
       console.log("image deleted");
