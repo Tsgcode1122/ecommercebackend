@@ -13,6 +13,6 @@ router.delete("/:id", ProductController.deleteProduct);
 
 router.get("/featured", ProductController.getFeaturedProducts);
 router.post("/upload-image", ProductController.uploadImage);
-router.delete("/images/:public_id", ProductController.deleteImage);
+router.delete("/images/delete", ProductController.deleteImage);
 
 module.exports = router;
