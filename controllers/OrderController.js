@@ -2,6 +2,7 @@
 
 const Order = require("../models/Order");
 const User = require("../models/User");
+const Product = require("../models/Product");
 // Get all orders
 exports.getAllOrders = async (req, res) => {
   try {
@@ -76,7 +77,81 @@ exports.getOrdersByUserId = async (req, res) => {
 
 // Update an order
 exports.updateOrder = async (req, res) => {
-  // Implement logic to update an order
+  const { orderId, paymentStatus, orderStatus } = req.body;
+  console.log(orderId, paymentStatus, orderStatus);
+  try {
+    // Find the order by ID
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Update payment status and order status
+    order.paymentStatus = paymentStatus;
+    order.orderStatus = orderStatus;
+
+    // Save the updated order
+    await order.save();
+
+    // Check if payment status is completed to handle stock update
+    if (paymentStatus === "completed") {
+      // Loop through cart items to update product stock
+      for (const item of order.cartItems) {
+        const { details } = item;
+        const { Quantity, itemId } = details;
+
+        // Split itemId to get productId, color, and size
+        const productId = itemId.substring(0, 24);
+        const color = itemId.substring(24, itemId.search(/[A-Z]/));
+        const size = itemId.substring(itemId.search(/[A-Z]/));
+
+        console.log(
+          `Product ID: ${productId}, Quantity: ${Quantity}, Color: ${color}, Size: ${size}`,
+        );
+
+        // Find the product by productId
+        const product = await Product.findById(productId);
+        if (!product) {
+          console.error(`Product with ID ${productId} not found`);
+          continue; // Move to the next iteration
+        }
+
+        // Find the variant that matches the color and size
+        const variant = product.variants.find(
+          (v) => v.color === color && v.sizes.some((s) => s.size === size),
+        );
+        if (variant) {
+          // Get the size variant
+          const sizeVariant = variant.sizes.find((s) => s.size === size);
+          if (sizeVariant) {
+            // Log initial stock
+            console.log(`Initial Stock: ${sizeVariant.stock}`);
+
+            // Update the stock of the variant
+            sizeVariant.stock -= Quantity;
+
+            // Deduct from the overall stock of the product
+            product.overallStock -= Quantity;
+
+            // Log final stock
+            console.log(`Final Stock: ${sizeVariant.stock}`);
+
+            await product.save();
+            console.log(
+              `Stock updated for product ${productId}, color ${color}, size ${size}`,
+            );
+          }
+        }
+      }
+    }
+
+    res.status(200).json({ message: "Order updated successfully" });
+    console.log("successfully updated order");
+  } catch (error) {
+    console.error("Error updating order:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 // Delete an order

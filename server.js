@@ -25,6 +25,7 @@ const emailRoutes = require("./routes/emailRoutes");
 const resetRoutes = require("./routes/resetRoutes");
 const paymentsRoutes = require("./routes/payments");
 const saleRoutes = require("./routes/salePopup");
+const onSaleMotionSlideRoutes = require("./routes/onSaleMotionSlideRoutes");
 const { randomBytes } = require("crypto");
 
 // Print the generated JWT secret
@@ -39,6 +40,7 @@ app.use("/api/email", emailRoutes);
 app.use("/api/reset", resetRoutes);
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/salePopup", saleRoutes);
+app.use("/api/onSaleMotionSlide", onSaleMotionSlideRoutes);
 // Start server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

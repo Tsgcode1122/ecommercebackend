@@ -4,23 +4,24 @@ const orderSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 
   // Payment method field to be added
-  paymentMethod: { type: String, required: true },
+  paymentMethod: { type: String },
 
   // Pay on delivery option field to be added
-  shippingMethod: { type: String, required: true },
+  shippingMethod: { type: String },
   payOnDeliveryOption: { type: String },
 
-  totalPrice: { type: Number, required: true },
+  totalPrice: { type: Number },
 
   cartItems: [
     {
-      name: { type: String, required: true },
+      name: { type: String },
       details: {
         Color: { type: String },
         Size: { type: String }, // Adding size field to item details
         Price: { type: Number }, // Including the price of each item
         Quantity: { type: Number }, // Making sure to record the quantity of each item
         Image: { type: String },
+        itemId: { type: String },
       },
     },
   ],
@@ -38,7 +39,9 @@ const orderSchema = new mongoose.Schema({
     enum: ["pending", "shipped", "delivered", "cancelled"],
     default: "pending",
   },
-
+  productId: {
+    type: String,
+  },
   shippingDetails: {
     address: { type: String },
   },
