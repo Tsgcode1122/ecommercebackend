@@ -76,26 +76,30 @@ exports.getOrdersByUserId = async (req, res) => {
 };
 
 // Update an order
+// Update an order
 exports.updateOrder = async (req, res) => {
   const { orderId, paymentStatus, orderStatus } = req.body;
   console.log(orderId, paymentStatus, orderStatus);
   try {
     // Find the order by ID
     const order = await Order.findById(orderId);
-
+    console.log(order);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    // Update payment status and order status
-    order.paymentStatus = paymentStatus;
-    order.orderStatus = orderStatus;
+    // Check if payment status is completed from frontend and pending or failed from backend
+    if (
+      paymentStatus === "completed" &&
+      (order.paymentStatus === "pending" || order.paymentStatus === "failed")
+    ) {
+      // Update payment status and order status
+      order.paymentStatus = paymentStatus;
+      order.orderStatus = orderStatus;
 
-    // Save the updated order
-    await order.save();
+      // Save the updated order
+      await order.save();
 
-    // Check if payment status is completed to handle stock update
-    if (paymentStatus === "completed") {
       // Loop through cart items to update product stock
       for (const item of order.cartItems) {
         const { details } = item;
@@ -144,6 +148,16 @@ exports.updateOrder = async (req, res) => {
           }
         }
       }
+
+      // Set payment status to completed from backend
+      order.paymentStatus = "completed";
+      await order.save();
+    } else {
+      order.paymentStatus = paymentStatus;
+      order.orderStatus = orderStatus;
+
+      // Save the updated order
+      await order.save();
     }
 
     res.status(200).json({ message: "Order updated successfully" });

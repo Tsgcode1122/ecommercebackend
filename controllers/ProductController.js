@@ -121,7 +121,7 @@ exports.updateProduct = async (req, res) => {
       orderCount,
     } = req.body;
 
-    const { id } = req.params; // Extract id from params
+    const { id } = req.params;
     console.log(id);
 
     const product = await Product.findById(id);

@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema(
     onSale: { type: Boolean, default: false },
     isFeatured: { type: Boolean, default: true, required: true },
     isNewRelease: { type: Boolean, default: false },
-    orderCount: { type: Number, default: 0 },
+    // orderCount: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true },
