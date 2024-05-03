@@ -29,6 +29,40 @@ exports.createCouponCode = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+exports.applyCouponCode = async (req, res) => {
+  const { code, totalQuantity } = req.body;
+  console.log(code);
+  try {
+    // Find the coupon with the provided code
+    const coupon = await CouponCode.findOne({ code });
+
+    console.log(totalQuantity);
+    if (!coupon || !coupon.active) {
+      console.log("Coupon code is invalid or inactive");
+      return res
+        .status(400)
+        .json({ message: "Coupon code is invalid or inactive" });
+    }
+    let minimumOrder = coupon.minimumOrder;
+    console.log(minimumOrder);
+    if (totalQuantity < minimumOrder) {
+      console.log(`Minimum order quantity not met for coupon code ${code}`);
+      return res.status(401).json({
+        message: `Minimum order quantity not met for coupon code ${code}`,
+        minimumOrder: minimumOrder, // Send minimumOrder back to frontend
+      });
+    }
+
+    // Calculate the discount
+    const discount = coupon.percentageOff / 100;
+
+    console.log("Coupon code applied successfully");
+    return res.status(200).json({ discount, minimumOrder });
+  } catch (error) {
+    console.error("Error applying coupon code:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 exports.getAllCouponCodes = async (req, res) => {
   try {
